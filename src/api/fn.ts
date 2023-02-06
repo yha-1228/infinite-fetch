@@ -10,7 +10,7 @@ export const getTodos = async (params: GetTodosParams) => {
   const { limit, page } = params;
 
   // loading
-  await new Promise((r) => setTimeout(r, 300));
+  await new Promise((r) => setTimeout(r, 600));
 
   const res = await axios.get<Todo[]>(
     'https://jsonplaceholder.typicode.com/todos',
@@ -26,7 +26,7 @@ export const getTodos = async (params: GetTodosParams) => {
 
 export const getTodo = async (id: string) => {
   // loading
-  await new Promise((r) => setTimeout(r, 300));
+  await new Promise((r) => setTimeout(r, 600));
 
   const res = await axios.get<Todo>(
     `https://jsonplaceholder.typicode.com/todos/${id}`

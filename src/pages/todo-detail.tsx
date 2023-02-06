@@ -29,8 +29,8 @@ export function TodoDetail() {
 
       <button onClick={() => navigate(-1)}>Back</button>
 
-      <p className={todo?.completed ? 'done' : ''}>
-        #{todo?.id} {todo?.title}
+      <p>
+        #{todo?.id} {todo?.title} {todo?.completed && '✅'}
       </p>
 
       <button onClick={handleToggleState}>Toggle State</button>
