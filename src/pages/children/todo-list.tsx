@@ -2,9 +2,9 @@ import { css } from '@emotion/css';
 import { useInView } from 'react-intersection-observer';
 import Skeleton from 'react-loading-skeleton';
 import { Link } from 'react-router-dom';
-import { TODO_PER_PAGE } from '../config';
-import { useInfiniteTodoContext } from '../hooks/use-infinite-todo-context';
-import { range } from '../misc';
+import { TODO_PER_PAGE } from '../../config';
+import { useInfiniteTodoContext } from '../../hooks/use-infinite-todo-context';
+import { range } from '../../misc';
 
 const todoListClass = css({
   '> * + *': { marginTop: 16 },

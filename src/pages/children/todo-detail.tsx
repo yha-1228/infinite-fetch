@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { getTodo } from '../api/fn';
-import { updateTodos } from '../api/utils';
-import { useFetch } from '../hooks/use-fetch';
-import { useInfiniteTodoContext } from '../hooks/use-infinite-todo-context';
+import { getTodo } from '../../api/fn';
+import { updateTodos } from '../../api/utils';
+import { useFetch } from '../../hooks/use-fetch';
+import { useInfiniteTodoContext } from '../../hooks/use-infinite-todo-context';
 
 export function TodoDetail() {
   const params = useParams<{ id: string }>();

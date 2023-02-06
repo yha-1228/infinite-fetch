@@ -2,10 +2,10 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import './app.css';
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { Home } from './pages/home';
-import { Root } from './pages/root';
-import { TodoDetail } from './pages/todo-detail';
-import { TodoList } from './pages/todo-list';
+import { Root } from './pages';
+import { Home } from './pages/children';
+import { TodoDetail } from './pages/children/todo-detail';
+import { TodoList } from './pages/children/todo-list';
 
 const router = createBrowserRouter([
   {
