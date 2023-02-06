@@ -8,6 +8,6 @@
 
 # 実装詳細
 
-- `useInfiniteFetch` - 無限スクロールのHook
-- `useTodoListContext` - Todo無限スクロールのGlobal State Hook
+- `useInfiniteFetch` - 無限ロードのHook
+- `useInfiniteTodoContext` - Todo無限ロードのGlobal State Hook
 - `TodoList` - Todo一覧
