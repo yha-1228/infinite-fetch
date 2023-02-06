@@ -51,6 +51,18 @@ export type UseInfiniteFetchReturn<T> = UseInfiniteFetchState<T> & {
   fetchNext: () => void;
 };
 
+/**
+ * Infinite loading of `useFetch`
+ *
+ * @example
+ * ```tsx
+ * const { data, setData, isFetching, error, fetchNext } = useInfiniteFetch({
+ *    // returns Todo[]
+ *   fetcher: (page) => getRequest(`/todos?limit=${PER_PAGE}&page=${page}`),
+ *   deps: [],
+ * }});
+ * ```
+ */
 export function useInfiniteFetch<T>(
   props: UseInfiniteFetchProps<T>
 ): UseInfiniteFetchReturn<T> {
