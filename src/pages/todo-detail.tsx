@@ -2,13 +2,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getTodo } from '../api/fn';
 import { updateTodos } from '../api/utils';
 import { useFetch } from '../hooks/use-fetch';
-import { useTodoListContext } from '../hooks/use-todo-list-context';
+import { useInfiniteTodoContext } from '../hooks/use-infinite-todo-context';
 
 export function TodoDetail() {
   const params = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const { data: todos, setData: setTodos } = useTodoListContext();
+  const { data: todos, setData: setTodos } = useInfiniteTodoContext();
 
   const { data: todo, setData: setTodo } = useFetch({
     fetcher: () => getTodo(params.id as string),

@@ -1,9 +1,15 @@
 import { css } from '@emotion/css';
-import { NavLink, Outlet } from 'react-router-dom';
-import { TodoListProvider } from '../hooks/use-todo-list-context';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { InfiniteTodoProvider } from '../hooks/use-infinite-todo-context';
 
 function Contexts({ children }: { children: React.ReactNode }) {
-  return <TodoListProvider perPage={10}>{children}</TodoListProvider>;
+  const { pathname } = useLocation();
+
+  return (
+    <InfiniteTodoProvider {...{ deps: [], enabled: /^\/todos/.test(pathname) }}>
+      {children}
+    </InfiniteTodoProvider>
+  );
 }
 
 export function Root() {
