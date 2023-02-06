@@ -47,6 +47,7 @@ type UseInfiniteFetchState<T> = {
 };
 
 export type UseInfiniteFetchReturn<T> = UseInfiniteFetchState<T> & {
+  isLoading: boolean;
   setData: (data: T[] | undefined) => void;
   fetchNext: () => void;
 };
@@ -140,6 +141,7 @@ export function useInfiniteFetch<T>(
 
   return {
     ...state,
+    isLoading: !state.data && !state.error,
     setData: (data: T[] | undefined) => setState((prev) => ({ ...prev, data })),
     fetchNext,
   };

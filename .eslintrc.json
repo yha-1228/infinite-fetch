@@ -32,6 +32,7 @@
     ],
     "@typescript-eslint/no-non-null-assertion": "off",
     "react/react-in-jsx-scope": "off",
+    "react/jsx-no-useless-fragment": "warn",
     "react/jsx-curly-brace-presence": "warn",
     "react/jsx-boolean-value": "warn",
     "react/prop-types": "off",

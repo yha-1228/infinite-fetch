@@ -41,6 +41,7 @@ export type UseFetchState<T> = {
 };
 
 export type UseFetchReturn<T> = UseFetchState<T> & {
+  isLoading: boolean;
   setData: (data: T | undefined) => void;
 };
 
@@ -85,6 +86,7 @@ export function useFetch<T>(props: UseFetchProps<T>): UseFetchReturn<T> {
 
   return {
     ...state,
+    isLoading: !state.data && !state.error,
     setData: (data: T | undefined) => setState((prev) => ({ ...prev, data })),
   };
 }
