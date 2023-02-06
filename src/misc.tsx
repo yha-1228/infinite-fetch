@@ -1,5 +1,4 @@
 import React from 'react';
-import { getTodo } from './api/fn';
 
 export const createContext = <T,>() => {
   const Context = React.createContext<T | undefined>(undefined);
