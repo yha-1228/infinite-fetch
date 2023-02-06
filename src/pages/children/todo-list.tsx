@@ -62,15 +62,8 @@ export function TodoList() {
                 key={todo.id}
                 ref={index === lastIndex ? triggerRef : undefined}
               >
-                <Link
-                  to={`/todos/${todo.id}`}
-                  className={css(todoClass, {
-                    ...(todo.completed && {
-                      textDecoration: 'line-through',
-                    }),
-                  })}
-                >
-                  #{todo.id} {todo.title}
+                <Link to={`/todos/${todo.id}`} className={todoClass}>
+                  #{todo.id} {todo.title} {todo?.completed && '✅'}
                 </Link>
               </li>
             );
