@@ -14,7 +14,7 @@ export type UseInfiniteFetchProps<T> = {
 };
 
 type FetchDataArg<T> = {
-  fetcher: UseInfiniteFetchProps<T>['fetcher'];
+  fetcher?: UseInfiniteFetchProps<T>['fetcher'];
   page: number;
   onIdle: () => void;
   onSuccess: (data: T[] | undefined) => void;
@@ -26,7 +26,7 @@ const fetchData = async <T>(arg: FetchDataArg<T>) => {
   const { fetcher, page, onIdle, onSuccess, onError, ignore = false } = arg;
   onIdle();
   try {
-    const data = await fetcher(page);
+    const data = await fetcher?.(page);
     if (!ignore) {
       onSuccess(data);
     }
@@ -69,7 +69,7 @@ export function useInfiniteFetch<T>(
 ): UseInfiniteFetchReturn<T> {
   const { fetcher, deps, initialPage = 0, enabled = true } = props;
 
-  const savedFetcher = useRef(fetcher);
+  const savedFetcher = useRef<UseInfiniteFetchProps<T>['fetcher']>();
 
   useEffect(() => {
     savedFetcher.current = fetcher;

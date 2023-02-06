@@ -10,7 +10,7 @@ export type UseFetchProps<T> = {
 };
 
 type FetchDataArg<T> = {
-  fetcher: UseFetchProps<T>['fetcher'];
+  fetcher?: UseFetchProps<T>['fetcher'];
   onIdle: () => void;
   onSuccess: (data: T | undefined) => void;
   onError: (error: Error) => void;
@@ -21,7 +21,7 @@ const fetchData = async <T>(arg: FetchDataArg<T>) => {
   const { fetcher, onIdle, onSuccess, onError, ignore } = arg;
   onIdle();
   try {
-    const data = await fetcher();
+    const data = await fetcher?.();
     if (!ignore) {
       onSuccess(data);
     }
@@ -48,7 +48,7 @@ export type UseFetchReturn<T> = UseFetchState<T> & {
 export function useFetch<T>(props: UseFetchProps<T>): UseFetchReturn<T> {
   const { fetcher, deps, enabled = true } = props;
 
-  const savedFetcher = useRef(fetcher);
+  const savedFetcher = useRef<UseFetchProps<T>['fetcher']>();
 
   useEffect(() => {
     savedFetcher.current = fetcher;
