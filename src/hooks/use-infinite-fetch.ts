@@ -13,15 +13,6 @@ export type UseInfiniteFetchProps<T> = {
   enabled?: boolean;
 };
 
-export type UseInfiniteFetchReturn<T> = {
-  data: T[] | undefined;
-  setData: React.Dispatch<React.SetStateAction<T[] | undefined>>;
-  isFetching: boolean;
-  error: Error | null;
-  page: number;
-  fetchNext: () => void;
-};
-
 type FetchDataArg<T> = {
   fetcher: UseInfiniteFetchProps<T>['fetcher'];
   page: number;
@@ -48,6 +39,18 @@ const fetchData = async <T>(arg: FetchDataArg<T>) => {
   }
 };
 
+type UseInfiniteFetchState<T> = {
+  page: number;
+  data: T[] | undefined;
+  isFetching: boolean;
+  error: Error | null;
+};
+
+export type UseInfiniteFetchReturn<T> = UseInfiniteFetchState<T> & {
+  setData: (data: T[] | undefined) => void;
+  fetchNext: () => void;
+};
+
 export function useInfiniteFetch<T>(
   props: UseInfiniteFetchProps<T>
 ): UseInfiniteFetchReturn<T> {
@@ -59,26 +62,32 @@ export function useInfiniteFetch<T>(
     savedFetcher.current = fetcher;
   }, [fetcher]);
 
-  const [page, setPage] = useState(initialPage);
-  const [data, setData] = useState<T[] | undefined>(undefined);
-  const [isFetching, setIsFetching] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  const [state, setState] = useState<UseInfiniteFetchState<T>>({
+    page: initialPage,
+    data: undefined,
+    isFetching: false,
+    error: null,
+  });
 
   const fetchNext = () => {
-    const nextPage = page + 1;
-    setPage(nextPage);
+    const nextPage = state.page + 1;
+
+    setState((prev) => ({ ...prev, page: nextPage }));
+
     fetchData({
       fetcher: savedFetcher.current,
       page: nextPage,
-      onIdle: () => setIsFetching(true),
+      onIdle: () => setState((prev) => ({ ...prev, isFetching: true })),
       onSuccess: (data) => {
-        setData((prev) => [...prev!, ...data!]);
-        setIsFetching(false);
-        setError(null);
+        setState((prev) => ({
+          ...prev,
+          data: [...prev.data!, ...data!],
+          isFetching: false,
+          error: null,
+        }));
       },
       onError: (error) => {
-        setIsFetching(false);
-        setError(error);
+        setState((prev) => ({ ...prev, isFetching: false, error }));
       },
     });
   };
@@ -91,15 +100,14 @@ export function useInfiniteFetch<T>(
     fetchData({
       fetcher: savedFetcher.current,
       page: initialPage,
-      onIdle: () => setIsFetching(true),
+      onIdle: () => {
+        setState((prev) => ({ ...prev, isFetching: true }));
+      },
       onSuccess: (data) => {
-        setData(data);
-        setIsFetching(false);
-        setError(null);
+        setState((prev) => ({ ...prev, data, isFetching: false, error: null }));
       },
       onError: (error) => {
-        setIsFetching(false);
-        setError(error);
+        setState((prev) => ({ ...prev, isFetching: false, error }));
       },
       ignore,
     });
@@ -108,20 +116,19 @@ export function useInfiniteFetch<T>(
       ignore = true;
 
       // Reset all state (for using context)
-      setPage(initialPage);
-      setData(undefined);
-      setIsFetching(false);
-      setError(null);
+      setState({
+        page: initialPage,
+        data: undefined,
+        isFetching: false,
+        error: null,
+      });
       return;
     };
   }, [enabled, initialPage, ...deps]);
 
   return {
-    data,
-    setData,
-    isFetching,
-    error,
-    page,
+    ...state,
+    setData: (data: T[] | undefined) => setState((prev) => ({ ...prev, data })),
     fetchNext,
   };
 }

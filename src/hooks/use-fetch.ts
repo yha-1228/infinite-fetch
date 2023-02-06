@@ -9,13 +9,6 @@ export type UseFetchProps<T> = {
   enabled?: boolean;
 };
 
-export type UseFetchReturn<T> = {
-  data: T | undefined;
-  setData: React.Dispatch<React.SetStateAction<T | undefined>>;
-  isFetching: boolean;
-  error: Error | null;
-};
-
 type FetchDataArg<T> = {
   fetcher: UseFetchProps<T>['fetcher'];
   onIdle: () => void;
@@ -41,6 +34,16 @@ const fetchData = async <T>(arg: FetchDataArg<T>) => {
   }
 };
 
+export type UseFetchState<T> = {
+  data: T | undefined;
+  isFetching: boolean;
+  error: Error | null;
+};
+
+export type UseFetchReturn<T> = UseFetchState<T> & {
+  setData: (data: T | undefined) => void;
+};
+
 export function useFetch<T>(props: UseFetchProps<T>): UseFetchReturn<T> {
   const { fetcher, deps, enabled = true } = props;
 
@@ -50,9 +53,11 @@ export function useFetch<T>(props: UseFetchProps<T>): UseFetchReturn<T> {
     savedFetcher.current = fetcher;
   }, [fetcher]);
 
-  const [data, setData] = useState<T | undefined>(undefined);
-  const [isFetching, setIsFetching] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  const [state, setState] = useState<UseFetchState<T>>({
+    data: undefined,
+    isFetching: false,
+    error: null,
+  });
 
   useEffect(() => {
     if (!enabled) return;
@@ -61,15 +66,14 @@ export function useFetch<T>(props: UseFetchProps<T>): UseFetchReturn<T> {
 
     fetchData({
       fetcher: savedFetcher.current,
-      onIdle: () => setIsFetching(true),
+      onIdle: () => {
+        setState((prev) => ({ ...prev, isFetching: true }));
+      },
       onSuccess: (data) => {
-        setData(data);
-        setIsFetching(false);
-        setError(null);
+        setState({ data, isFetching: false, error: null });
       },
       onError: (error) => {
-        setIsFetching(false);
-        setError(error);
+        setState((prev) => ({ ...prev, isFetching: false, error }));
       },
       ignore,
     });
@@ -79,5 +83,8 @@ export function useFetch<T>(props: UseFetchProps<T>): UseFetchReturn<T> {
     };
   }, [enabled, ...deps]);
 
-  return { data, setData, isFetching, error };
+  return {
+    ...state,
+    setData: (data: T | undefined) => setState((prev) => ({ ...prev, data })),
+  };
 }
