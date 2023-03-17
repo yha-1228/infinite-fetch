@@ -65,10 +65,9 @@ export function TodoList() {
               <li
                 key={todo.id}
                 ref={index === lastIndex ? triggerRef : undefined}
+                className={todoClass}
               >
-                <Link to={`/todos/${todo.id}`} className={todoClass}>
-                  #{todo.id} {todo.title} {todo?.completed && '✅'}
-                </Link>
+                #{todo.id} {todo.title} {todo?.completed && '✅'}
               </li>
             );
           })}

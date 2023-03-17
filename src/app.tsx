@@ -4,7 +4,6 @@ import './app.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Root } from './pages';
 import { Home } from './pages/children';
-import { TodoDetail } from './pages/children/todo-detail';
 import { TodoList } from './pages/children/todo-list';
 
 const router = createBrowserRouter([
@@ -14,7 +13,6 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: 'todos', element: <TodoList /> },
-      { path: 'todos/:id', element: <TodoDetail /> },
     ],
   },
 ]);
