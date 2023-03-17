@@ -41,6 +41,7 @@ export function TodoList() {
   } = useInfiniteFetch({
     fetcher: (page) => getTodos({ limit: TODO_PER_PAGE, page }),
     deps: [],
+    hasNext: (lastData) => lastData.length < TODO_PER_PAGE,
   });
 
   const { ref: triggerRef } = useInView({

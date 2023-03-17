@@ -11,6 +11,10 @@ export type UseInfiniteFetchOptions<T> = {
    */
   deps: React.DependencyList;
   /**
+   * Has next page?
+   */
+  hasNext: (lastData: T[]) => boolean;
+  /**
    * @default 0
    */
   initialPage?: number;
@@ -37,13 +41,19 @@ export type UseInfiniteFetchResult<T> = UseInfiniteFetchState<T> & {
 export function useInfiniteFetch<T>(
   options: UseInfiniteFetchOptions<T>
 ): UseInfiniteFetchResult<T> {
-  const { fetcher, deps, initialPage = 0, enabled = true } = options;
+  const { fetcher, deps, hasNext, initialPage = 0, enabled = true } = options;
 
   const savedFetcher = React.useRef(fetcher);
 
   React.useEffect(() => {
     savedFetcher.current = fetcher;
   }, [fetcher]);
+
+  const savedHasNext = React.useRef(hasNext);
+
+  React.useEffect(() => {
+    savedHasNext.current = hasNext;
+  }, [hasNext]);
 
   const [state, setState] = React.useState<UseInfiniteFetchState<T>>({
     page: initialPage,
@@ -52,13 +62,21 @@ export function useInfiniteFetch<T>(
     error: null,
   });
 
+  const [isFinished, setIsFinished] = React.useState(false);
+
   const fetchNext = async () => {
+    if (isFinished) return;
+
     const nextPage = state.page + 1;
 
     setState((prev) => ({ ...prev, isFetching: true }));
 
     try {
       const data = await savedFetcher.current(nextPage);
+
+      const isFinished = savedHasNext.current(data);
+      setIsFinished(isFinished);
+
       setState((prev) => ({
         ...prev,
         page: nextPage,
