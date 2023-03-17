@@ -1,20 +1,9 @@
 import { css } from '@emotion/css';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { InfiniteTodoProvider } from '../hooks/use-infinite-todo-context';
-
-function Contexts({ children }: { children: React.ReactNode }) {
-  const { pathname } = useLocation();
-
-  return (
-    <InfiniteTodoProvider {...{ deps: [], enabled: /^\/todos/.test(pathname) }}>
-      {children}
-    </InfiniteTodoProvider>
-  );
-}
+import { NavLink, Outlet } from 'react-router-dom';
 
 export function Root() {
   return (
-    <Contexts>
+    <>
       <ul
         className={css({
           display: 'flex',
@@ -50,6 +39,6 @@ export function Root() {
       </ul>
 
       <Outlet />
-    </Contexts>
+    </>
   );
 }

@@ -2,8 +2,9 @@ import { css } from '@emotion/css';
 import { useInView } from 'react-intersection-observer';
 import Skeleton from 'react-loading-skeleton';
 import { Link } from 'react-router-dom';
+import { getTodos } from '../../api/fn';
 import { TODO_PER_PAGE } from '../../config';
-import { useInfiniteTodoContext } from '../../hooks/use-infinite-todo-context';
+import { useInfiniteFetch } from '../../hooks/use-infinite-fetch';
 import { range } from '../../misc';
 
 const todoListClass = css({
@@ -37,7 +38,10 @@ export function TodoList() {
     isLoading,
     isFetching,
     fetchNext,
-  } = useInfiniteTodoContext();
+  } = useInfiniteFetch({
+    fetcher: (page) => getTodos({ limit: TODO_PER_PAGE, page }),
+    deps: [],
+  });
 
   const { ref: triggerRef } = useInView({
     threshold: 0.8,
