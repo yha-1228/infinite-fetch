@@ -2,12 +2,10 @@
 
 # 概要
 
-- ページはHome、Todo一覧、Todo詳細
+- ページはHome、Todo一覧
 - Todo一覧は無限スクロール読み込み
-- Todo一覧、Todo詳細で無限スクロール読み込みのStateを共有する
 
 # 実装詳細
 
 - `useInfiniteFetch` - 無限ロードのHook
-- `useInfiniteTodoContext` - Todo無限ロードのGlobal State Hook
 - `TodoList` - Todo一覧
