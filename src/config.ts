@@ -1,1 +1,1 @@
-export const TODO_PER_PAGE = 10;
+export const TODO_PER_PAGE = 70;
